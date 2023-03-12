@@ -15,8 +15,8 @@ module Users
       user.username = params[:username] if params.key?(:username)
       user.email = params[:email] if params.key?(:email)
       user.password = params[:password] if params.key?(:password)
-
-      user.save
+      
+      user.jti = user.generate_jwt if user.save
       
       errors.merge!(user.errors) if user.errors.present?
     end
