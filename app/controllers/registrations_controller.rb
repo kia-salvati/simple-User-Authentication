@@ -2,11 +2,11 @@ class RegistrationsController < ApplicationController
   respond_to :json
 
   def create
-    user = User.new(sign_up_params)
+    user = Users::RegistrationService.run(sign_up_params)
     
-    if user.save
+    if user.valid?
       token = user.generate_jwt
-      render json: { token: token }
+      render jsonapi: { token: token }
     else
       render json:  { error: user.errors.full_messages }, status: :unprocessable_entity
     end
