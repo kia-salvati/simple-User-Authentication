@@ -1,7 +1,8 @@
 require 'jwt'
 
 class JwtAuth
-  def self.encode(payload)
+  def self.encode(payload, expiration = 24.hours.from_now)
+    payload[:exp] = expiration.to_i
     JWT.encode(
       payload,
       Rails.application.secrets.secret_key_base)
@@ -11,6 +12,6 @@ class JwtAuth
     JWT.decode(
       token, 
       Rails.application.secrets.secret_key_base, 
-      true, algorithm: 'HS256')
+      true, algorithm: 'HS256').first
   end
 end
