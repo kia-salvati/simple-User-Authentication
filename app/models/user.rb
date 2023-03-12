@@ -7,15 +7,14 @@ class User < ApplicationRecord
             allow_blank: false, length: { maximum: 70 }
   validates :email, presence: true, uniqueness: { case_sensitive: false },
             format: { with: URI::MailTo::EMAIL_REGEXP, massege: 'invalid format'}
-  validates :password, presence: true, format: { with: PASSWORD_REGEX }
   validates :jti, uniqueness: { case_sensitive: true }, allow_nil: true
 
   devise :database_authenticatable, :registerable,
-         :jwt_authenticatable, jwt_revocation_strategy: JwtBlacklist
+         :recoverable, :rememberable, :validatable
 
   private 
 
   def generate_jwt
-   JwtAuth.encode({ id: self.id })
+    JwtAuth.encode({ id: self.id })
   end
 end
