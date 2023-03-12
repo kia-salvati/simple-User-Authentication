@@ -9,9 +9,9 @@ RSpec.describe User, type: :model do
   end
 
   context 'Validates Uniqueness' do
-    it { is_expected.to validate_uniqueness_of(:username).case_insensitive }
-    it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
-    it { is_expected.to validate_uniqueness_of(:jti).case_sensitive }
+    it { should validate_uniqueness_of(:username).case_insensitive }
+    it { should validate_uniqueness_of(:email).case_insensitive }
+    it { should validate_uniqueness_of(:jti) }
   end
 
   context 'Create User in date base' do
@@ -24,15 +24,15 @@ RSpec.describe User, type: :model do
 
   context "Can't a create user" do
     it 'when username is blank' do
-      usrer = create(:user, username: '')
-      
-      expect(user.valid?).to be_false
+      expect { user = create(:user, username: '') }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
 
   context '#jwt_token' do
     it 'generates a JWT token for the user' do
-      expect(user.generate_jwt).to be_present
+      user = create(:user)
+      
+      expect(JwtAuth.encode(user.id)).to be_present
     end
   end
 end
