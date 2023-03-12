@@ -12,7 +12,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  private 
+  private
 
   def generate_jwt
     JwtAuth.encode({ id: self.id })
