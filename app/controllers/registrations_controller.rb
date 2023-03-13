@@ -1,19 +1,17 @@
 class RegistrationsController < ApplicationController
-  respond_to :json
+  respond_to :jsonapi
 
   def create
     user = Users::RegistrationService.run(sign_up_params)
     
     if user.valid?
-      token = user.generate_jwt
-      render jsonapi: { token: token }
+      render jsonapi: user.result, include: %w(email jti),status: :created #201
     else
-      render json:  { error: user.errors.full_messages }, status: :unprocessable_entity
+      render jsonapi_errors:  { detail: user.errors.messages }, status: :not_acceptable #406
     end
   end
-
-
-  private 
+  
+  private
 
   def sign_up_params
     params.require(:user).permit(
