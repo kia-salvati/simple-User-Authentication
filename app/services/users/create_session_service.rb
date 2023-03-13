@@ -13,7 +13,7 @@ module Users
     private
    
     def find_user
-      @user = User.find_by(params[:email])
+      @user = User.find_by(email: params[:email])
 
       user.valid_password?(params[:password])
         
