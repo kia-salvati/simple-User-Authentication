@@ -1,21 +1,21 @@
 class SessionsController < Devise::SessionsController
   respond_to :jsonapi
+  
   def create 
-    user = User.find_for_database_authintication(email: params[:user][:email])
+    user = User::CreateSessionService.run(params: user_params)
 
-    if user && user.valid_password?(params[:user][:password])
+    if user.valid?
       sign_in(user)
-      token = user.generate_jwt
-      render json: { token: token }
+      render jsonapi: user.result, include: %w(jti), status: :accepted #202
     else 
-      render json: { error: 'Invalid email or password' }, status: :unauthorized #401
+      render jsonapi_errors: { detail: user.errors.messages }, status: :not_acceptable #406
     end
   end
 
   def destroy
+    # token = User::DestroySessionService.run()
     token = request.headers['Authorization']&.split(' ')&.last
     if token
-      #* decodeed_token = JWT.decode(token, Rails.application.secrets.secret_key_base, true, algorithm: 'HS256')
       decoded_token = JwtAuth.decode(token)
       user_id = decoded_token[0]['user_id'] #! check to make sure the id address is right inside the hash
       user = User.find(user_id)
@@ -23,6 +23,14 @@ class SessionsController < Devise::SessionsController
       sign_out(user)
     end
     head :no_content
+  end
+
+  def user_params
+    params.require(:user).permit(
+      :email,
+      :password,
+      :username
+    )
   end
 end
 
