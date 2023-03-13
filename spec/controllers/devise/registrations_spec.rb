@@ -1,19 +1,49 @@
 require 'rails_helper'
 
-RSpec.describe RegistrationsController, type: :request do
+RSpec.describe Users::RegistrationsController, type: :request do
   describe "#Create" do
     context 'valid requests' do
       it 'create a new user' do
         attributes = FactoryBot.attributes_for(:user)
-        attributes[:password_confirmation] = attributes[:password]
-        binding.pry
-        post "/api/signup", params: { 
+        
+        post "/api/signup", params: {
           user: attributes
         }
+        
         json = json_parser
         
-        expect { response }.to have_http_status(:created) #201
-        expect(json).to include(attributes[:username])
+        expect(response.status).to eql(201) # created
+        expect(json["data"]["attributes"]["email"]).to include(attributes[:email])
+        expect(json["data"]["attributes"]["jti"]).to be_present
+      end
+    end
+    
+    context 'Invalid requests' do
+      it 'wiht a blank username' do
+        attributes = FactoryBot.attributes_for(:user, username: '')
+
+        post "/api/signup", params: {
+          user: attributes
+        }
+
+        json = json_parser
+        
+        expect(response.status).to eql(406) # not_acceptable
+        expect(json["errors"][0]["detail"]["base"]).to eql(["Username can't be blank", "Username is too short (minimum is 1 character)"])
+      end
+
+      it 'with a nil email' do
+        attributes = FactoryBot.attributes_for(:user, email: nil)
+
+        post "/api/signup", params: {
+          user: attributes
+        }
+        
+        json = json_parser
+
+        binding.pry
+        expect(response.status).to eql(406) # not_acceptable
+        expect(json["errors"][0]["detail"]["base"]).to eql(["Email can't be blank", "Email is invalid"])
       end
     end
   end
