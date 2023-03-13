@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   scope :api do 
-    devise_for :users, cotrollers: { 
-                sessions: 'devise/sessions',
-                registrations: 'devise/registrations'},
+    devise_for :users, controllers: { 
+                sessions: 'users/sessions',
+                registrations: 'users/registrations'},
                 path: '',
                 path_names: {
                               sign_in: 'login',
