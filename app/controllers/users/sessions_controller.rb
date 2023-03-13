@@ -6,8 +6,8 @@ class Users::SessionsController < Devise::SessionsController
 
     if user.valid?
       sign_in(user)
-      render jsonapi: user.result, include: %w(jti), status: :accepted #202
-    else 
+      render jsonapi: user.result, fields: { user: %w(jti) }, status: :accepted #202
+    else
       render jsonapi_errors: { detail: user.errors.messages }, status: :not_acceptable #406
     end
   end
