@@ -1,5 +1,5 @@
 module Users
-  class RegistrationService< ActiveInteraction::Base
+  class RegistrationService < ActiveInteraction::Base
     attr_reader :params, :user
 
     hash :params, strip: false
@@ -10,8 +10,11 @@ module Users
       user
     end
 
+    private
+    
     def create_user
       @user = User.new
+      
       user.username = params[:username] if params.key?(:username)
       user.email = params[:email] if params.key?(:email)
       user.password = params[:password] if params.key?(:password)

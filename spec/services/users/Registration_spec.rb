@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Users::RegistrationService do
-  describe '#execute'do
+  describe '#execute' do
     context 'Valid Inputs' do
       it 'creates a new user' do
         attributes = FactoryBot.attributes_for(:user)
@@ -10,6 +10,7 @@ RSpec.describe Users::RegistrationService do
 
         expect(service_result.valid?).to be_truthy
         expect(service_result.result.encrypted_password).to be_present
+        expect(service_result.result.jti).to be_present
         expect(service_result.result.username).to eql(attributes[:username])
       end
     end
