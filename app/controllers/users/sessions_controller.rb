@@ -1,7 +1,7 @@
-class SessionsController < Devise::SessionsController
+class Users::SessionsController < Devise::SessionsController
   respond_to :jsonapi
   
-  def create 
+  def create
     user = User::CreateSessionService.run(params: user_params)
 
     if user.valid?
