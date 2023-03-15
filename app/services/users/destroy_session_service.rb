@@ -11,7 +11,6 @@ module Users
     end
 
     def token_validation
-      
       if params.key?(:jti)
         token = params[:jti]
 
