@@ -6,7 +6,7 @@ RSpec.describe Users::CreateSessionService do
       it 'Create a JWT token in database and return the token' do
         user = create(:user, password: '!@#$%^&*')
 
-        params = object_to_params(user)
+        params = object_attributes(user)
         
         service_result = described_class.run(params: params)
 
@@ -20,7 +20,7 @@ RSpec.describe Users::CreateSessionService do
       it 'with a wrong eamil' do
         user = create(:user)
 
-        params = object_to_params(user)
+        params = object_attributes(user)
         params[:email] = 'wrong_email'
 
         service_result = described_class.run(params: params)
@@ -33,7 +33,7 @@ RSpec.describe Users::CreateSessionService do
       it 'with a wrong password' do
         user = create(:user)
 
-        params = object_to_params(user)
+        params = object_attributes(user)
         params[:password] = 'wrong_password'
 
         service_result = described_class.run(params: params)
@@ -45,12 +45,7 @@ RSpec.describe Users::CreateSessionService do
     end
   end
 
-  def object_to_params(user)
-    params = Hash.new
-
-    params[:email] = user.email
-    params[:password] = '!@#$%^&*'
-    params[:username] = user.username
-    params
+  def object_attributes(user)
+    params = {email: user.email, password: '!@#$%^&*', username: user.username }
   end
 end
