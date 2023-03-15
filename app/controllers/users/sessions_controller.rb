@@ -3,6 +3,7 @@ class Users::SessionsController < Devise::SessionsController
   
   def create
     user = Users::CreateSessionService.run(params: user_params)
+    
     if user.valid?
       # sign_in(user)
       render jsonapi: user.result, fields: { user: %w(jti) }, status: :accepted #202
@@ -12,23 +13,22 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def destroy
-    # token = User::DestroySessionService.run()
-    token = request.headers['Authorization']&.split(' ')&.last
-    if token
-      decoded_token = JwtAuth.decode(token)
-      user_id = decoded_token[0]['user_id'] #! check to make sure the id address is right inside the hash
-      user = User.find(user_id)
-      user.invalidate_all_jwt_tokens
-      sign_out(user)
+    user = Users::DestroySessionService.run(params: user_params)
+
+    if user.valid?
+      render jsonapi: user.result ,status: :accepted #202
+      # sign_out(user)
+    else
+      render jsonapi_errors: { detail: user.errors.messages }, status: :not_acceptable #406
     end
-    head :no_content
   end
 
   def user_params
-    params.require(:user).permit(
+    params[:user].require(:payload).permit(
       :email,
       :password,
-      :username
+      :username,
+      :jti
     )
   end
 end
