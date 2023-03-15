@@ -14,6 +14,6 @@ class User < ApplicationRecord
 
 
   def generate_jwt
-    JwtAuth.encode({ id: self.id })
+    JwtAuth.encode({ email: self.email })
   end
 end
