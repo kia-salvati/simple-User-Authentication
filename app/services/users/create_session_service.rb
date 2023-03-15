@@ -13,19 +13,16 @@ module Users
     private
    
     def find_user
-      
       @user = User.find_by(email: params[:email])
 
       if user.present?
         if user.valid_password?(params[:password])
           user.jti = user.generate_jwt
         else
-          @user = User.new
-          user.errors.add(:user, "invalid password or email")
+          errors.add(:base, "invalid password or email")
         end
       else
-        @user = User.new
-        user.errors.add(:user, "invalid password or email")
+        errors.add(:base, "invalid password or email")
       end
     end
   end

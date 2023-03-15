@@ -2,10 +2,9 @@ class Users::SessionsController < Devise::SessionsController
   respond_to :jsonapi
   
   def create
-    user = User::CreateSessionService.run(params: user_params)
-
+    user = Users::CreateSessionService.run(params: user_params)
     if user.valid?
-      sign_in(user)
+      # sign_in(user)
       render jsonapi: user.result, fields: { user: %w(jti) }, status: :accepted #202
     else
       render jsonapi_errors: { detail: user.errors.messages }, status: :not_acceptable #406
