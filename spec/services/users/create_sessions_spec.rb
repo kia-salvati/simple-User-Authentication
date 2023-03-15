@@ -24,10 +24,10 @@ RSpec.describe Users::CreateSessionService do
         params[:email] = 'wrong_email'
 
         service_result = described_class.run(params: params)
-
-        expect(service_result.result.jti).to_not be_present
-        expect(service_result.result.errors.messages[:user]).to include("invalid password or email")
-        expect(service_result.result.valid?).to be_falsey
+        
+        expect(service_result.result).to be_nil
+        expect(service_result.errors.messages[:base]).to include("invalid password or email")
+        expect(service_result.valid?).to be_falsey
       end
 
       it 'with a wrong password' do
@@ -39,7 +39,7 @@ RSpec.describe Users::CreateSessionService do
         service_result = described_class.run(params: params)
         
         expect(service_result.result.jti).to_not be_present
-        expect(service_result.result.errors.messages[:user]).to include("invalid password or email")
+        expect(service_result.errors.messages[:base]).to include("invalid password or email")
         expect(service_result.valid?).to be_falsey
       end
     end
