@@ -41,7 +41,6 @@ RSpec.describe Users::RegistrationsController, type: :request do
         
         json = json_parser
 
-        binding.pry
         expect(response.status).to eql(406) # not_acceptable
         expect(json["errors"][0]["detail"]["base"]).to eql(["Email can't be blank", "Email is invalid"])
       end
