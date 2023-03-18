@@ -11,7 +11,12 @@ RSpec.describe User, type: :model do
   context 'Validates Uniqueness' do
     it { should validate_uniqueness_of(:username).case_insensitive }
     it { should validate_uniqueness_of(:email).case_insensitive }
-    it { should validate_uniqueness_of(:jti) }
+  end
+
+  it 'Validates uniqueness of jti' do
+    user = create(:user)
+    
+    should validate_uniqueness_of(:jti) 
   end
 
   context 'Create User in date base' do

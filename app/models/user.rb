@@ -15,6 +15,6 @@ class User < ApplicationRecord
   after_create :generate_jwt
  
   def generate_jwt
-    JwtAuth.encode({ email: self.email })
+    self.jti = JwtAuth.encode({ email: self.email })
   end
 end
