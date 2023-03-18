@@ -19,7 +19,7 @@ module Users
       user.email = params[:email] if params.key?(:email)
       user.password = params[:password] if params.key?(:password)
       
-      user.jti = user.generate_jwt if user.save
+      user.save
       
       errors.merge!(user.errors) if user.errors.present?
     end
