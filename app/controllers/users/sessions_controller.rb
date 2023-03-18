@@ -1,6 +1,4 @@
 class Users::SessionsController < Devise::SessionsController
-  respond_to :jsonapi
-  
   def create
     user = Users::CreateSessionService.run(params: user_params)
     

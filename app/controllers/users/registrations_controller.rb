@@ -1,6 +1,4 @@
-class Users::RegistrationsController < Devise::RegistrationsController
-  respond_to :jsonapi
-
+class Users::RegistrationsController < Devise::SessionsController
   def create
     user = Users::RegistrationService.run(params: sign_up_params)
     
