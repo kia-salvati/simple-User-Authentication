@@ -9,7 +9,7 @@ RSpec.describe Users::SessionsController, type: :request do
         user.jti = user.generate_jwt
         user.save
 
-        payload = JwtAuth.encode(payload: user, expiration: 5.minutes.from_now)
+        payload = GenerateToken::JwtAuth.encode(payload: user, expiration: 5.minutes.from_now)
 
         delete '/api/logout',
           headers: { 'Authorization': "Bearer #{user.jti}" },

@@ -8,7 +8,7 @@ RSpec.describe Users::SessionsController, type: :request do
 
         params = object_attributes(user)
 
-        payload = JwtAuth.encode(payload: params, expiration: 5.minutes.from_now)
+        payload = GenerateToken::JwtAuth.encode(payload: params, expiration: 5.minutes.from_now)
         
         post '/api/login', params: {
           user: payload
@@ -29,7 +29,7 @@ RSpec.describe Users::SessionsController, type: :request do
         params = object_attributes(user)
         params[:password] = 'wrong password'
 
-        payload = JwtAuth.encode(payload: params, expiration: 5.minutes.from_now)
+        payload = GenerateToken::JwtAuth.encode(payload: params, expiration: 5.minutes.from_now)
 
         post '/api/login', params: {
           user: payload
@@ -46,7 +46,7 @@ RSpec.describe Users::SessionsController, type: :request do
         params = object_attributes(user)
         params[:email] = 'wrong email'
 
-        payload = JwtAuth.encode(payload: params, expiration: 5.minutes.from_now)
+        payload = GenerateToken::JwtAuth.encode(payload: params, expiration: 5.minutes.from_now)
         
         post '/api/login', params: {
           user: payload

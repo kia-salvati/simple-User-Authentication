@@ -33,7 +33,7 @@ RSpec.describe Users::DestroySessionService do
         user.jti = user.generate_jwt
         user.save
 
-        invalid_token = JwtAuth.encode(email: "wrong@email.com")
+        invalid_token = GenerateToken::JwtAuth.encode(email: "wrong@email.com")
         params = { jti: invalid_token }
         
         service_result = described_class.run(params: params)

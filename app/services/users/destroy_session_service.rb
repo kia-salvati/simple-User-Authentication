@@ -14,7 +14,7 @@ module Users
       if params.key?(:jti)
         token = params[:jti]
 
-        decoded_token = JwtAuth.decode(token)
+        decoded_token = GenerateToken::JwtAuth.decode(token)
 
         unless @user = User.find_by(email: decoded_token['email'])
           errors.add(:base, 'The generated token is incorrect')

@@ -12,6 +12,6 @@ class ApplicationController < ActionController::API
 
   def authenticate_user!
     token = request.params[:user]
-    request.params[:user] = JwtAuth.decode(token)
+    request.params[:user] = GenerateToken::JwtAuth.decode(token)
   end
 end

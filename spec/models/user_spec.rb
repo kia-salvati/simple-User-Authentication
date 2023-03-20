@@ -37,7 +37,7 @@ RSpec.describe User, type: :model do
     it 'generates a JWT token for the user through JwtAuth class' do
       user = create(:user)
       
-      expect(JwtAuth.encode(user_id: user.id, expiration: 1.hours.from_now)).to be_present
+      expect(GenerateToken::JwtAuth.encode(user_id: user.id, expiration: 1.hours.from_now)).to be_present
     end
 
     it 'generates a JWT token for the user through User model' do

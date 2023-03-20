@@ -1,4 +1,5 @@
 require 'uri'
+
 class User < ApplicationRecord
 
   PASSWORD_REGEX = /\A(?=.*[a-zA-Z])(?=.*[0-9]).{6,}\z/
@@ -15,6 +16,6 @@ class User < ApplicationRecord
   after_create :generate_jwt
  
   def generate_jwt
-    self.jti = JwtAuth.encode({ email: self.email })
+    self.jti = GenerateToken::JwtAuth.encode({ email: self.email })
   end
 end

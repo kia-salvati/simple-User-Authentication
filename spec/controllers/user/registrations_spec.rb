@@ -6,7 +6,7 @@ RSpec.describe Users::RegistrationsController, type: :request do
       it 'create a new user' do
         attributes = FactoryBot.attributes_for(:user)
         
-        payload = JwtAuth.encode(payload: attributes, expiration: 5.minutes.from_now)
+        payload = GenerateToken::JwtAuth.encode(payload: attributes, expiration: 5.minutes.from_now)
         
         post "/api/signup", params: {
           user: payload
@@ -24,7 +24,7 @@ RSpec.describe Users::RegistrationsController, type: :request do
       it 'wiht a blank username' do
         attributes = FactoryBot.attributes_for(:user, username: '')
 
-        payload = JwtAuth.encode(payload: attributes, expiration: 5.minutes.from_now)
+        payload = GenerateToken::JwtAuth.encode(payload: attributes, expiration: 5.minutes.from_now)
 
         post "/api/signup", params: {
           user: payload
@@ -39,7 +39,7 @@ RSpec.describe Users::RegistrationsController, type: :request do
       it 'with a nil email' do
         attributes = FactoryBot.attributes_for(:user, email: nil)
 
-        payload = JwtAuth.encode(payload: attributes, expiration: 5.minutes.from_now)
+        payload = GenerateToken::JwtAuth.encode(payload: attributes, expiration: 5.minutes.from_now)
 
         post "/api/signup", params: {
           user: payload
